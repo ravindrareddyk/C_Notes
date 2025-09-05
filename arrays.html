@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Definitive Guide to Arrays in C Programming</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+        .content h1, .content h2, .content h3 {
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .content h1 { font-size: 2rem; color: #111827; }
+        .content h2 { font-size: 1.5rem; color: #1f2937; }
+        .content h3 { font-size: 1.25rem; color: #374151; }
+        .content pre {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .content th, .content td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .content th {
+            background-color: #e5e7eb;
+            font-weight: 600;
+        }
+        .content tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .content p, .content ul, .content ol {
+            margin-bottom: 1rem;
+            line-height: 1.625;
+        }
+        .download-btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .download-btn:hover {
+            background-color: #1e40af;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #2563eb;
+            animation: spin 1s ease infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Notes On Arrays in C Programming</h1>
+        <!--<p>A Comprehensive Guide on Fundamentals, Operations, and Advanced Concepts</p>-->
+        <div id="download-btn" class="download-btn mt-6 w-fit mx-auto">Download as PDF</div>
+        <div id="loading-spinner" class="hidden mt-6">
+            <div class="spinner"></div>
+            <p class="text-center text-sm mt-2">Generating PDF...</p>
+        </div>
+    </div>
+    <div id="ebook-content" class="content"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    const markdownContent = `
+
+
+
+## Introduction to Arrays
+
+In C programming, we often need to store multiple values of the same type (such as marks of 100 students or daily temperatures). Using individual variables for each value (e.g., \`score1\`, \`score2\`, ..., \`score100\`) is difficult to manage and can cause errors.
+
+**Arrays** help by grouping related values under a single name. Each value in the array can be accessed using its index number. This makes the program easier to write, reuse, and maintain. Arrays also work well with loops and use memory more efficiently.
+
+### Example:
+
+\`\`\`c
+#include <stdio.h>
+
+int main() {
+    // Declare an array to store scores of 5 students
+    int scores[5] = {85, 90, 78, 92, 88};
+
+    // Print all scores using a loop
+    for (int i = 0; i < 5; i++) {
+        printf("Score of student %d = %d\\n", i + 1, scores[i]);
+    }
+
+    return 0;
+}
+\`\`\`
+
+### Explanation of Code
+
+* \`int scores[5]\` → Creates an array of size 5 to store integers.
+
+* \`{85, 90, 78, 92, 88}\` → Assigns values to the array.
+
+* The loop \`for (int i = 0; i < 5; i++)\` → Runs from 0 to 4.
+
+* \`scores[i]\` → Accesses each student’s score using the index.
+
+* Output will show each student’s score in order.
+
+### Definition of an array:
+
+An **array** in C is a collection of elements of the same data type, stored in a **continuous block of memory**. Each element is identified by an index (starting from 0), allowing efficient storage, access, and management of multiple values under a single variable name.
+
+### Syntax:
+
+\`type array_name[size];\`
+// 'type' is the data type, 'size' is a positive integer constant.
+
+---
+
+## Declaring Arrays
+
+### Introduction
+
+Once you understand the idea of arrays, the next step is learning how to **formally declare** them. A declaration tells the compiler the **data type**, **array name**, and **number of elements**.
+
+An array declaration has three components:
+
+* **Data type** → type of elements (int, float, char, etc.)
+
+* **Array name** → identifier (like a variable name)
+
+* **Size** → fixed number of elements (must be a constant in standard C)
+
+### Formal Syntax:
+
+\`<data_type> <array_name>[<constant_size>];\`
+
+### Variations:
+
+* \`int numbers[10];\` // Array of 10 integers
+
+* \`float marks[5];\` // Array of 5 floats
+
+* \`char grade[4];\` // Array of 4 characters
+
+### Example 1: Declaring Arrays of Different Types
+
+\`\`\`c
+#include <stdio.h>
+
+int main() {
+    int nums[5];    // 5 integers
+    float prices[3];  // 3 floats
+    char letters[4]; // 4 characters
+
+    printf("Size of nums: %lu bytes\\n", sizeof(nums));
+    printf("Size of prices: %lu bytes\\n", sizeof(prices));
+    printf("Size of letters: %lu bytes\\n", sizeof(letters));
+
+    return 0;
+}
+\`\`\`
+
+### Meaning of \`%lu\`:
+
+* \`%\` → tells \`printf\` that a format specifier is coming.
+
+* \`l\` → means \`long\` (long integer).
+
+* \`u\` → means \`unsigned\` (no negative values).
+
+* So \`%lu\` = “print an unsigned long integer”.
+
+### Why \`%lu\` here?
+
+The \`sizeof\` operator returns a value of type \`size_t\`. On most systems, \`size_t\` is defined as an \`unsigned long int\`. That’s why \`%lu\` is the correct way to print the result of \`sizeof\`. In modern C (C99 and later), you can also use \`%zu\` (which is specifically for \`size_t\`).
+
+### Explanation
+
+* \`sizeof(nums)\` = 20 (5 × 4 bytes).
+
+* \`sizeof(prices)\` = 12 (3 × 4 bytes).
+
+* \`sizeof(letters)\` = 4 (4 × 1 byte).
+
+* Shows how declaration directly impacts memory.
+
+### Example 2: Declaration First, Assignment Later
+
+\`\`\`c
+#include <stdio.h>
+
+int main() {
+    int arr[3];  // Declare array of size 3
+
+    // Assign values later
+    arr[0] = 100;
+    arr[1] = 200;
+    arr[2] = 300;
+
+    for(int i=0; i<3; i++) {
+        printf("arr[%d] = %d\\n", i, arr[i]);
+    }
+
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* Declaration reserves space.
+
+* Assignment happens later in the program.
+
+* Array elements are accessed using indices.
+
+### Example 3: Using a Preprocessor Constant for Size
+
+\`\`\`c
+#include <stdio.h>
+#define SIZE 4  // Preprocessor constant
+
+int main() {
+    int arr[SIZE];  // Use constant for array size
+
+    for(int i=0; i<SIZE; i++) {
+        arr[i] = (i + 1) * 10;  // Fill values dynamically
+    }
+
+    for(int i=0; i<SIZE; i++) {
+        printf("arr[%d] = %d\\n", i, arr[i]);
+    }
+
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`#define SIZE 4\` → defines a constant before compilation.
+
+* Compiler replaces \`SIZE\` with \`4\`.
+
+* Makes code more readable and flexible.
+
+---
+
+## Initializing Arrays
+
+When an array is declared in C, the compiler allocates a block of contiguous memory for its elements, but it does not automatically assign meaningful values to those elements. Instead, they may contain **garbage values** - unpredictable numbers left over in memory. Using these uninitialized values can lead to incorrect results or even program crashes.
+
+To avoid this problem, we **initialise arrays**. Initialisation means assigning definite values to some or all elements of an array at the time of declaration or later in the program.
+
+### Syntax :
+
+\`<data_type> array_name[size] = {value1, value2, value3 …….};\`
+
+### Other valid example:
+
+* \`int arr[5] = {10, 20, 30, 40, 50};\` // Full initialization
+
+* \`int arr[5] = {10, 20};\` // Partial initialization, rest = 0
+
+* \`int arr[] = {1, 2, 3};\` // Size auto-calculated = 3
+
+### Example 1: Full Initialization
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[5] = {10, 20, 30, 40, 50};
+
+    for(int i=0; i<5; i++) {
+        printf("arr[%d] = %d\\n", i, arr[i]);
+    }
+
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`int arr[5] = {10, 20, 30, 40, 50};\`
+
+* Declares an array of size 5.
+
+* Each element explicitly assigned a value.
+
+* \`arr[0] = 10, arr[1] = 20, … arr[4] = 50\`.
+
+* The \`for\` loop iterates from index 0 to 4.
+
+* \`printf\` displays each element sequentially.
+
+* Output is **predictable**, unlike uninitialized arrays.
+
+### Example 2: Partial Initialization
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[5] = {10, 20}; // Only first 2 initialized
+
+    for(int i=0; i<5; i++) {
+        printf("arr[%d] = %d\\n", i, arr[i]);
+    }
+
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* Only first 2 elements initialized: \`arr[0] = 10\`, \`arr[1] = 20\`.
+
+* Remaining elements are automatically set to \`0\` (for static/global arrays) or \`0\` if explicitly initialized in locals.
+
+* So final array = \`{10, 20, 0, 0, 0}\`.
+
+* This behavior is very useful when you don’t want to set every element manually.
+
+### Example 3: Implicit Size Initialization
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[] = {5, 10, 15, 20};
+
+    int size = sizeof(arr) / sizeof(arr[0]); // Calculate size dynamically
+
+    for(int i=0; i<size; i++) {
+        printf("arr[%d] = %d\\n", i, arr[i]);
+    }
+
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`int arr[] = {5, 10, 15, 20};\`
+
+* Compiler counts values and sets size automatically (size = 4).
+
+* \`sizeof(arr)\` → total bytes of array (here 16 bytes if \`int\` = 4).
+
+* \`sizeof(arr[0])\` → size of one element (4 bytes).
+
+* \`sizeof(arr)/sizeof(arr[0])\` → total elements = 16/4 = 4.
+
+* Loop prints elements one by one.
+
+* **Advantage:** No need to manually specify size, compiler calculates it.
+
+### Example 4: Character Array Initialization
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char vowels[5] = {'a', 'e', 'i', 'o', 'u'};
+
+    for(int i=0; i<5; i++) {
+        printf("vowels[%d] = %c\\n", i, vowels[i]);
+    }
+
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* Character arrays can be initialized with character literals.
+
+* Each character occupies 1 byte.
+
+* Printed one by one with \`%c\`.
+
+* Used often in strings (covered later sections).
+
+### Example 5: Zero Initialization Using Empty Braces
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[5] = {0}; // All elements initialized to 0
+
+    for(int i=0; i<5; i++) {
+        printf("arr[%d] = %d\\n", i, arr[i]);
+    }
+
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`{0}\` means first element = 0, rest automatically filled with 0.
+
+* So array becomes \`{0, 0, 0, 0, 0}\`.
+
+* Useful for clearing/resetting arrays quickly.
+
+---
+
+## Accessing Array Elements
+
+Declaring and initialising arrays is only the first step. To use an array effectively, you must know how to access and manipulate its individual elements.
+
+Every element in an array is identified by an index number, starting from 0.
+
+### Example :
+
+If you declare \`int marks[5];\`, then:
+
+* \`marks[0]\` → 1st element
+
+* \`marks[1]\` → 2nd element
+
+* ...
+
+* \`marks[4]\` → 5th element
+
+Accessing array elements allows us to read values (like displaying student marks) or modify values (like updating attendance records). Arrays are the foundation for advanced concepts such as sorting, searching, and matrix operations.
+
+### Definition:
+
+Accessing an array element means retrieving or modifying its value using its **index**.
+
+* Indexing starts at 0 and goes up to size-1.
+
+* Using an index outside this range leads to **undefined behaviour** (dangerous bug).
+
+### Syntax:
+
+\`array_name[index] = value;\` // Assign value
+\`value = array_name[index];\` // Retrieve value
+
+### Example 1: Basic Access and Modification
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int numbers[3] = {80, 60, 40};
+    // Access elements
+    printf("First element: %d\\n", numbers[0]);
+    printf("Second element: %d\\n", numbers[1]);
+    // Modify an element
+    numbers[1] = 50;
+    printf("Second element after update: %d\\n", numbers[1]);
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`int arr[3] = {80, 60, 40};\` → Creates array of 3 integers.
+
+* \`arr[0]\` → Accesses first element = 80.
+
+* \`arr[1]\` → Accesses second element = 60.
+
+* \`arr[1] = 50;\` → Modifies second element from 60 → 50.
+
+* Final output shows updated value.
+
+### Example 2: Input and Output Using Indices
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[5];
+    // Input elements from user
+    for(int i=0; i<5; i++) {
+        printf("Enter value for arr[%d]: ", i);
+        scanf("%d", &arr[i]);
+    }
+    // Display elements
+    printf("\\nYou entered: ");
+    for(int i=0; i<5; i++) {
+        printf("%d ", arr[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`for(int i=0; i<5; i++)\` → Loop iterates through each index.
+
+* \`scanf("%d", &arr[i]);\` → Takes input from user into each element.
+
+* Another loop prints values using indices.
+
+* Demonstrates how arrays simplify storing multiple inputs.
+
+### Example 3: Out-of-Bounds Access
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[3] = {1, 2, 3};
+    printf("arr[2] = %d\\n", arr[2]);   // Valid access
+    printf("arr[3] = %d\\n", arr[3]);   // Out-of-bounds!
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`arr[2]\` → Last valid element = 3.
+
+* \`arr[3]\` → Invalid access (since array indices go only 0..2).
+
+* Output may show garbage, crash, or unexpected results.
+
+* **Lesson:** Always ensure indices are within bounds.
+
+### Example 4: Summing Array Elements
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int numbers[4] = {2, 4, 6, 8};
+    int sum = 0;
+    for(int i=0; i<4; i++) {
+        sum += numbers[i];   // Access each element and add
+    }
+    printf("Sum = %d\\n", sum);
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`numbers[4] = {2, 4, 6, 8};\` → Array of 4 numbers.
+
+* Loop accesses each element (\`numbers[i]\`) and adds it to sum.
+
+* Final output = 20.
+
+* This shows how accessing elements allows calculations on datasets.
+
+### Summary:
+
+* Array elements are accessed using **indices** (0..size-1).
+
+* Access lets you **read or modify** values.
+
+* Loops + array indexing make handling multiple values easy.
+
+* Going out of bounds leads to **undefined behavior**.
+
+---
+
+## Arrays and Loops
+
+### Introduction
+
+Arrays become truly powerful when combined with **loops**. Loops allow us to **traverse** an array (visit every element one by one). We can easily perform repetitive tasks such as reading inputs, printing outputs, summing values, searching, or updating elements.
+
+Without loops, we would have to write multiple \`printf\` or \`scanf\` statements for every element, which is inefficient.
+
+### Definition
+
+**Looping with arrays** means repeatedly accessing elements by increasing or decreasing their indices automatically inside a \`for\`, \`while\`, or \`do-while\` loop.
+
+* **Forward Traversal** → From index \`0\` to \`size-1\`.
+
+* **Backward Traversal** → From index \`size-1\` to \`0\`.
+
+### Syntax:
+
+\`\`\`c
+for(int i=0; i<size; i++) {
+    // Access element
+    printf("%d", array[i]);
+}
+\`\`\`
+
+Or
+
+\`\`\`c
+while(condition) {
+    // Access array with index
+}
+\`\`\`
+
+### Example 1: Traversing an Array Using a \`for\` Loop
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    printf("Array elements: ");
+    for(int i=0; i<5; i++) {
+        printf("%d ", arr[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`int arr[5] = {10, 20, 30, 40, 50};\` → Array of 5 integers.
+
+* \`for(int i=0; i<5; i++)\` → Iterates from index 0 to 4.
+
+* Inside loop: \`arr[i]\` accesses each element sequentially.
+
+* Output: \`10 20 30 40 50\`.
+
+* Shows how a loop eliminates repetitive \`printf\` calls.
+
+### Example 2: Reading Input into an Array
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int marks[5];
+    // Taking input
+    for(int i=0; i<5; i++) {
+        printf("Enter mark for student %d: ", i+1);
+        scanf("%d", &marks[i]);
+    }
+    // Displaying input
+    printf("\\nMarks entered: ");
+    for(int i=0; i<5; i++) {
+        printf("%d ", marks[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`int marks[5];\` → Array to store 5 integers.
+
+* First \`for\` loop with \`scanf\` → User enters values.
+
+* Second \`for\` loop with \`printf\` → Displays all values.
+
+* Efficiently handles input/output without repeating code.
+
+### Example 3: Backwards Traversal
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[5] = {2, 4, 6, 8, 10};
+    printf("Array in reverse order: ");
+    for(int i=4; i>=0; i--) {
+        printf("%d ", arr[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* Array = \`{2, 4, 6, 8, 10}\`.
+
+* Loop starts from \`i=4\` (last index) and decrements until 0.
+
+* Prints values in reverse order.
+
+* Output: \`10 8 6 4 2\`.
+
+### Example 4: Finding Maximum Element
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int arr[5] = {12, 45, 7, 89, 23};
+    int max = arr[0];
+    for(int i=1; i<5; i++) {
+        if(arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    printf("Maximum value = %d\\n", max);
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* Start with \`max = arr[0]\`.
+
+* Loop checks each element.
+
+* If \`arr[i] > max\`, update max.
+
+* Final result = 89.
+
+* This is a common pattern used in algorithms.
+
+### Summary:
+
+* Loops + arrays = efficient data processing.
+
+* Forward traversal → process all elements.
+
+* Backward traversal → useful for reversing order.
+
+* Common use cases: input/output, summation, searching, finding min/max.
+
+* Always ensure loop bounds match array size.
+
+---
+
+## Multi-Dimensional Arrays
+
+### Introduction
+
+So far, we’ve worked with **one-dimensional arrays** (1D) — like a single row of lockers. But sometimes data is **naturally tabular** (rows and columns), such as:
+
+* Marks of students in different subjects
+
+* A chessboard or tic-tac-toe game grid
+
+* Image pixels (rows × columns)
+
+For these cases, C provides **multi-dimensional arrays**, where you can think of:
+
+* **2D arrays** as **tables (rows × columns)**.
+
+* **3D arrays** as **a stack of tables (layers of 2D grids)**.
+
+### Analogy:
+
+* 1D array → A single row of lockers.
+
+* 2D array → A classroom seating chart (rows × columns).
+
+* 3D array → Multiple classrooms stacked in a building (floor × row × column).
+
+### Definition
+
+A **multi-dimensional array** is an array of arrays.
+
+* **2D array** → an array where each element is itself a 1D array.
+
+* **3D array** → an array where each element is a 2D array, and so on.
+
+### Syntax :
+
+**2D Array:**
+\`<data_type> array_name[rows][columns];\`
+
+**3D Array:**
+\`<data_type> array_name[x][y][z];\`
+
+### Example 1: Declaring and Initialising a 2D Array
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int matrix[2][3] = { {1, 2, 3}, {4, 5, 6} };
+    // Display elements
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<3; j++) {
+            printf("matrix[%d][%d] = %d\\n", i, j, matrix[i][j]);
+        }
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`int matrix[2][3];\` → Creates a table with 2 rows × 3 columns.
+
+* **Initialization:**
+
+  * Row 0 → \`{1, 2, 3}\`
+
+  * Row 1 → \`{4, 5, 6}\`
+
+* **Nested loop:**
+
+  * Outer loop (\`i\`) → traverses rows.
+
+  * Inner loop (\`j\`) → traverses columns.
+
+* Output shows element with its indices.
+
+### Example 2: Taking Input for a 2D Array
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int marks[2][3];   // 2 students × 3 subjects
+    // Input marks
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<3; j++) {
+            printf("Enter mark for student %d subject %d: ", i+1, j+1);
+            scanf("%d", &marks[i][j]);
+        }
+    }
+    // Display marks
+    printf("\\nMarks entered:\\n");
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<3; j++) {
+            printf("%d ", marks[i][j]);
+        }
+        printf("\\n");   // New line after each row
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation:
+
+* Declares a **2D array** named \`marks\`.
+
+* It has **2 rows** and **3 columns** → meaning 2 students, each with marks in 3 subjects.
+
+* **Memory Layout:**
+
+  * \`marks[0][0], marks[0][1], marks[0][2]\` → student 1’s marks
+
+  * \`marks[1][0], marks[1][1], marks[1][2]\` → student 2’s marks
+
+* **Input Section:**
+
+  * \`for(int i=0; i<2; i++) {\`
+
+  * \`for(int j=0; j<3; j++) {\`
+
+  * \`printf("Enter mark for student %d subject %d: ", i+1, j+1);\`
+
+  * \`scanf("%d", &marks[i][j]);\`
+
+  * \`}\`
+
+  * \`}\`
+
+* Outer loop (\`i\`) → controls the student number.
+
+* Inner loop (\`j\`) → controls the subject number.
+
+* \`printf("Enter mark for student %d subject %d: ", i+1, j+1);\` Displays a user-friendly message. We use \`i+1\` and \`j+1\` because arrays start at index 0, but students and subjects are usually numbered from 1.
+
+* \`scanf("%d", &marks[i][j]);\` Takes an integer input from the user. \`&marks[i][j]\` means we are giving the address of the array element, so the value gets stored in the correct location.
+
+* **After this nested loop completes:**
+
+  * Student 1’s marks for 3 subjects → stored in \`marks[0][0]\`, \`marks[0][1]\`, \`marks[0][2]\`.
+
+  * Student 2’s marks for 3 subjects → stored in \`marks[1][0]\`, \`marks[1][1]\`, \`marks[1][2]\`.
+
+* **Output Section :**
+
+  * \`printf("\\nMarks entered:\\n");\`
+
+  * \`for(int i=0; i<2; i++) {\`
+
+  * \`for(int j=0; j<3; j++) {\`
+
+  * \`printf("%d ", marks[i][j]);\`
+
+  * \`}\`
+
+  * \`printf("\\n");\` // New line after each row
+
+  * \`}\`
+
+* After printing one row (all subjects for a student), move to the next line. This makes output appear like a table.
+
+* **Input :**
+
+  * Enter mark for student 1 subject 1: 85
+
+  * Enter mark for student 1 subject 2: 97
+
+  * Enter mark for student 1 subject 3: 70
+
+  * Enter mark for student 2 subject 1: 56
+
+  * Enter mark for student 2 subject 2: 86
+
+  * Enter mark for student 2 subject 3: 81
+
+* **Output:**
+
+  \`\`\`
+  Marks entered:
+  85 97 70
+  56 86 81
+  \`\`\`
+
+* **How the Program Works in Memory**
+
+  * Internally, memory looks like this:
+
+| Student | Subject 1 | Subject 2 | Subject 3 |
+|---|---|---|---|
+| 1 | 85 | 90 | 78 |
+| 2 | 88 | 76 | 95 |
+
+* Stored as \`marks[2][3]\` in row-major order (row by row in contiguous memory).
+
+* **Key points from this Program**
+
+  * Nested loops are required to handle 2D arrays (rows × columns).
+
+  * \`marks[i][j]\` represents the element at **row i, column j**.
+
+  * Input/output formatting is crucial to make results easy to read.
+
+  * Always remember C uses 0-based indexing, so \`marks[0][0]\` is the **first student’s first subject**.
+
+### Examples:
+
+#### Program 1: Find Total Marks per Student
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int marks[2][3];
+    int total[2] = {0}; // Array to store totals for 2 students
+    // Input marks
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<3; j++) {
+            printf("Enter mark for student %d subject %d: ", i+1, j+1);
+            scanf("%d", &marks[i][j]);
+            total[i] += marks[i][j];   // Add to student’s total
+        }
+    }
+    // Display total marks per student
+    for(int i=0; i<2; i++) {
+        printf("Total marks for student %d = %d\\n", i+1, total[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`int total[2] = {0};\` → Array to store totals for each student, initialized to 0.
+
+* Nested loops take marks input.
+
+* Inside input loop → \`total[i] += marks[i][j];\` adds each subject mark to that student’s total.
+
+* Second loop prints total marks of each student.
+
+* **Input:**
+
+  * Enter mark for student 1 subject 1: 85
+
+  * Enter mark for student 1 subject 2: 87
+
+  * Enter mark for student 1 subject 3: 78
+
+  * Enter mark for student 2 subject 1: 88
+
+  * Enter mark for student 2 subject 2: 76
+
+  * Enter mark for student 2 subject 3: 96
+
+* **Output:**
+
+  \`\`\`
+  Total marks for student 1 = 250
+  Total marks for student 2 = 260
+  \`\`\`
+
+#### Program 2: Find Average Marks per Subject
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int marks[2][3];         // 2 students × 3 subjects
+    int total[2] = {0};      // To store total marks for each student
+    float avg[2] = {0};      // To store average marks for each student
+    // Input marks
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<3; j++) {
+            printf("Enter mark for student %d subject %d: ", i+1, j+1);
+            scanf("%d", &marks[i][j]);
+            total[i] += marks[i][j];   // Add marks to student's total
+        }
+    }
+    // Compute averages for each student
+    for(int i=0; i<2; i++) {
+        avg[i] = total[i] / 3.0;   // 3 subjects per student
+    }
+    // Display results
+    for(int i=0; i<2; i++) {
+        printf("\\nStudent %d: Total = %d, Average = %.2f\\n", i+1, total[i], avg[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`int marks[2][3];\` A 2×3 array for 2 students and 3 subjects.
+
+* \`int total[2] = {0};\` Array to hold total marks of each student.
+
+* \`float avg[2] = {0};\` Array to hold average marks of each student.
+
+* **Input section:**
+
+  * Nested loop for students (\`i\`) and subjects (\`j\`).
+
+  * \`scanf\` reads marks.
+
+  * \`total[i] += marks[i][j];\` keeps adding subject marks to student’s total.
+
+* **Average calculation:**
+
+  * For each student, divide total marks by 3.0 (floating-point division).
+
+* **Output:**
+
+  * Prints total and average for each student.
+
+* **Input:**
+
+  * Enter mark for student 1 subject 1: 20
+
+  * Enter mark for student 1 subject 2: 10
+
+  * Enter mark for student 1 subject 3: 15
+
+  * Enter mark for student 2 subject 1: 20
+
+  * Enter mark for student 2 subject 2: 10
+
+  * Enter mark for student 2 subject 3: 18
+
+* **Output:**
+
+  \`\`\`
+  Student 1: Total = 45, Average = 15.00
+  Student 2: Total = 48, Average = 16.00
+  \`\`\`
+
+#### Example : 3D Array
+
+\`\`\`c
+#include <stdio.h>   // Header file for input/output functions
+int main() {
+    // Declare and initialize a 3D array (2 layers × 2 rows × 2 columns)
+    int cube[2][2][2] = {
+        { {1, 2}, {3, 4} },   // First layer (cube[0])
+        { {5, 6}, {7, 8} }    // Second layer (cube[1])
+    };
+    // Traverse the 3D array using three nested loops
+    for(int i=0; i<2; i++) {          // Loop for layers
+        for(int j=0; j<2; j++) {      // Loop for rows inside each layer
+            for(int k=0; k<2; k++) { // Loop for columns inside each row
+                // Print the current element with its indices
+                printf("cube[%d][%d][%d] = %d\\n", i, j, k, cube[i][j][k]);
+            }
+        }
+    }
+    return 0;   // Program ends successfully
+}
+\`\`\`
+
+### Explanation of Declaration
+
+\`int cube[2][2][2];\` → declares a **3D array** with dimensions:
+
+* 2 layers (like floors of a building)
+
+* Each layer has 2 rows
+
+* Each row has 2 columns
+
+* Total elements = 2 × 2 × 2 = 8.
+
+### Initialization:
+
+* **First layer** (\`cube[0]\`)
+
+  * Row 0 = \`{1, 2}\`
+
+  * Row 1 = \`{3, 4}\`
+
+* **Second layer** (\`cube[1]\`)
+
+  * Row 0 = \`{5, 6}\`
+
+  * Row 1 = \`{7, 8}\`
+
+### Explanation of Loops
+
+\`\`\`c
+for(int i=0; i<2; i++) {
+    for(int j=0; j<2; j++) {
+        for(int k=0; k<2; k++) {
+            printf("cube[%d][%d][%d] = %d\\n", i, j, k, cube[i][j][k]);
+        }
+    }
+}
+\`\`\`
+
+* Outer loop (\`i\`) → selects the layer (\`cube[0]\` or \`cube[1]\`).
+
+* Middle loop (\`j\`) → selects the row in that layer.
+
+* Inner loop (\`k\`) → selects the column in that row.
+
+* \`cube[i][j][k]\` → accesses each element one by one.
+
+* This **triple-nested loop** ensures we visit all 8 elements.
+
+* A 3D array is an array of 2D arrays.
+
+* Access requires three indices → \`[layer][row][column]\`.
+
+* Total elements = product of dimensions (x*y*z).
+
+* Triple-nested loops are commonly used to traverse 3D arrays.
+
+* Very useful in real-world:
+
+  * 3D graphics (x, y, z coordinates)
+
+  * Storing multiple 2D images (frames in animation)
+
+  * Simulation of cubes, blocks, or voxels
+
+### Examples:
+
+#### Example 1: Matrix Addition
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int A[2][2], B[2][2], Sum[2][2];
+    // Input matrices A and B
+    printf("Enter elements of 2x2 matrix A:\\n");
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<2; j++) {
+            scanf("%d", &A[i][j]);
+        }
+    }
+    printf("Enter elements of 2x2 matrix B:\\n");
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<2; j++) {
+            scanf("%d", &B[i][j]);
+        }
+    }
+    // Compute sum
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<2; j++) {
+            Sum[i][j] = A[i][j] + B[i][j];
+        }
+    }
+    // Display result
+    printf("\\nResultant Matrix (A+B):\\n");
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<2; j++) {
+            printf("%d ", Sum[i][j]);
+        }
+        printf("\\n");
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation:
+
+* Reads two 2×2 matrices.
+
+* Adds corresponding elements: \`Sum[i][j] = A[i][j] + B[i][j]\`.
+
+* Prints the result.
+
+#### Example 2: Matrix Multiplication
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int A[2][2], B[2][2], Product[2][2] = {0};
+    // Input matrices A and B
+    printf("Enter elements of 2x2 matrix A:\\n");
+    for(int i=0; i<2; i++)
+        for(int j=0; j<2; j++)
+            scanf("%d", &A[i][j]);
+    printf("Enter elements of 2x2 matrix B:\\n");
+    for(int i=0; i<2; i++)
+        for(int j=0; j<2; j++)
+            scanf("%d", &B[i][j]);
+    // Compute multiplication
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<2; j++) {
+            for(int k=0; k<2; k++) {
+                Product[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+    // Display result
+    printf("\\nResultant Matrix (A*B):\\n");
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<2; j++) {
+            printf("%d ", Product[i][j]);
+        }
+        printf("\\n");
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation of 2×2 Matrix Multiplication Program
+
+* **Declaration**
+
+  * \`A[2][2]\` → first matrix
+
+  * \`B[2][2]\` → second matrix
+
+  * \`Product[2][2]\` → result matrix (initialized to 0).
+
+* **Input Matrices**
+
+  * First nested loop → reads all 4 elements of matrix \`A\`.
+
+  * Second nested loop → reads all 4 elements of matrix \`B\`.
+
+* **Multiplication Logic**
+
+  * Triple nested loop performs multiplication:
+
+    * \`i\` → selects the row of \`A\`.
+
+    * \`j\` → selects the column of \`B\`.
+
+    * \`k\` → multiplies elements of the row of \`A\` with the column of \`B\`.
+
+  * **Formula used:**
+    \`Product[i][j] = A[i][0]*B[0][j] + A[i][1]*B[1][j]\`
+
+* **Result Storage**
+
+  * Each computed value is stored in \`Product[i][j]\`.
+
+  * Since it’s initialized with \`{0}\`, accumulation works correctly.
+
+* **Output**
+
+  * Final nested loop prints the result as a 2×2 matrix row by row.
+
+#### Example 3. Matrix Transpose:
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    int A[2][3], Transpose[3][2];
+    // Input matrix A
+    printf("Enter elements of 2x3 matrix A:\\n");
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<3; j++) {
+            scanf("%d", &A[i][j]);
+        }
+    }
+    // Compute transpose
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<3; j++) {
+            Transpose[j][i] = A[i][j];
+        }
+    }
+    // Display transpose
+    printf("\\nTranspose of Matrix A:\\n");
+    for(int i=0; i<3; i++) {
+        for(int j=0; j<2; j++) {
+            printf("%d ", Transpose[i][j]);
+        }
+        printf("\\n");
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* **Declaration**
+
+  * \`A[2][3]\` → original matrix with 2 rows and 3 columns.
+
+  * \`Transpose[3][2]\` → transposed matrix with 3 rows and 2 columns.
+
+* **Input Matrix**
+
+  * Nested loops (\`i\`, \`j\`) read all 6 elements of matrix \`A\`.
+
+* **Transpose Logic**
+
+  * Formula: \`Transpose[j][i] = A[i][j]\`.
+
+  * Rows of \`A\` become columns in \`Transpose\`.
+
+  * Example: \`A[0][1]\` becomes \`Transpose[1][0]\`.
+
+* **Output**
+
+  * Another nested loop prints the transposed matrix.
+
+  * Dimensions are flipped: original \`2×3\` → result \`3×2\`.
+
+#### Example 4. Matrix Inverse (2×2 only)
+
+Matrix Inverse (2×2 only) :
+If
+
+$$A = \\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}$$
+
+
+then
+
+$$A^{-1} = \\frac{1}{ad - bc} \\begin{bmatrix} d & -b \\\\ -c & a \\end{bmatrix}$$
+
+
+provided $(ad - bc) \\neq 0$.
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    float A[2][2], Inverse[2][2];
+    float det;
+    // Input 2x2 matrix
+    printf("Enter elements of 2x2 matrix A:\\n");
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<2; j++) {
+            scanf("%f", &A[i][j]);
+        }
+    }
+    // Calculate determinant
+    det = (A[0][0]*A[1][1]) - (A[0][1]*A[1][0]);
+    if(det == 0) {
+        printf("Matrix is singular, inverse does not exist.\\n");
+        return 0;
+    }
+    // Compute inverse using formula
+    Inverse[0][0] =  A[1][1] / det;
+    Inverse[0][1] = -A[0][1] / det;
+    Inverse[1][0] = -A[1][0] / det;
+    Inverse[1][1] =  A[0][0] / det;
+    // Display inverse
+    printf("\\nInverse of Matrix A:\\n");
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<2; j++) {
+            printf("%.2f ", Inverse[i][j]);
+        }
+        printf("\\n");
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* **Declaration**
+
+  * \`A[2][2]\` → original 2×2 matrix.
+
+  * \`Inverse[2][2]\` → stores the inverse matrix.
+
+  * \`det\` → determinant of matrix \`A\`.
+
+* **Input Section**
+
+  * Nested loops read 4 elements from the user into \`A\`.
+
+* **Determinant Calculation**
+
+  * Formula: \`det = (a*d) - (b*c)\`
+
+  * \`det = (A[0][0]*A[1][1]) - (A[0][1]*A[1][0])\`
+
+  * If \`det == 0\`, the matrix is **singular** → no inverse exists.
+
+* **Inverse Formula for 2×2 Matrix**
+
+  * For
+    
+
+    $$A = \\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}$$
+
+  * Inverse is:
+    
+
+    $$ \\frac{1}{det} \\begin{bmatrix} d & -b \\\\ -c & a \\end{bmatrix} $$
+
+* **Assignment**
+
+  * Each element of \`Inverse\` is calculated using the above formula and divided by \`det\`.
+
+* **Output Section**
+
+  * Nested loops print the resulting inverse with 2 decimal places (\`%.2f\`).
+
+## Character Arrays:
+
+### Introduction
+
+In C, there is no dedicated **string type** like in other languages (Python, Java). Instead, strings are stored as **arrays of characters**, ending with a special **null character (\`\\0\`**). This null terminator marks the end of the string. Without it, C won’t know where the string stops.
+
+Strings are widely used for:
+
+* Storing names, messages, and text.
+
+* Handling user input.
+
+* File processing and text-based applications.
+
+### Definition
+
+A **character array** is a sequence of characters stored in contiguous memory. A **string in C** is a character array terminated by \`\\0\`.
+
+### Syntax
+
+* \`char str[size];\` // declaration
+
+* \`char str[] = {'H','e','l','l','o','\\0'};\` // explicit initialization
+
+* \`char str[] = "Hello";\` // shorthand (compiler adds \`\\0\`)
+
+### Example 1: Declaring and Printing a String
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char name[6] = "Hello";   // 5 letters + 1 for '\0'
+    printf("String: %s\\n", name);
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`char name[6] = "Hello";\`
+
+* Array of 6 characters.
+
+* Stored as: \`{'H', 'e', 'l', 'l', 'o', '\\0'}\`.
+
+* \`%s\` in \`printf\` automatically prints characters until \`\\0\` is found.
+
+* Output: \`Hello\`.
+
+### Example 2: Difference Between Character Array and String Literal
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char word1[] = {'C','o','d','e'};       // No '\0' at end
+    char word2[] = {'C','o','d','e','\0'};  // Proper string
+    char word3[] = "Code";                  // Compiler auto adds '\0'
+    printf("word1: %s\\n", word1);   // unpredictable output
+    printf("word2: %s\\n", word2);   // prints Code
+    printf("word3: %s\\n", word3);   // prints Code
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`word1\` → Not null-terminated → \`%s\` keeps printing until it accidentally finds \`\\0\` in memory → unpredictable.
+
+* \`word2\` → Correct C string (has \`\\0\`).
+
+* \`word3\` → Shorthand, compiler automatically adds \`\\0\`.
+
+* Always null-terminate strings.
+
+### Example 3: Reading Strings from User
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char name[20];
+    printf("Enter your name: ");
+    scanf("%s", name);   // reads string until first space
+    printf("Hello, %s!\\n", name);
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`char name[20];\` → Can store up to 19 characters + \`\\0\`.
+
+* \`scanf("%s", name);\` → Reads user input until space or newline.
+
+* If user enters "Ravi Kumar", only "Ravi" is stored.
+
+* **Limitation** : \`scanf\` stops at whitespace(space, tab, newline) → cannot read full sentences.
+
+### getchar() and putchar() in C
+
+#### \`getchar()\`
+
+* Reads a **single character** from standard input (keyboard).
+
+* Returns the ASCII value of the character.
+
+* You usually store it in a \`char\` variable.
+
+#### \`putchar()\`
+
+* \`int putchar(int ch);\`
+
+* Prints a **single character** to standard output (screen).
+
+* Takes a character (or ASCII value) as argument.
+
+### Example : using \`getchar()\` and \`putchar()\`
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char ch;
+    printf("Enter a character: ");
+    ch = getchar();           // read single character
+    printf("You entered: ");
+    putchar(ch);              // print the same character
+    printf("\\n");
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`char ch;\` → variable to hold a character.
+
+* \`getchar();\` → waits for the user to type a character (e.g., \`A\`).
+
+* The entered character is stored in \`ch\`.
+
+* \`putchar(ch);\` → prints the character stored in \`ch\` back on screen.
+
+* **Output :**
+
+  * Enter a character: C
+
+  * You entered: C
+
+* **Summary:**
+
+  * \`getchar()\` → input a single character.
+
+  * \`putchar()\` → output a single character.
+
+  * Useful for character-by-character input/output (like building small text processors).
+
+### Example 4: Using \`gets()\` and \`fgets()\`
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char line[50];
+    printf("Enter a line: ");
+    fgets(line, sizeof(line), stdin);   // safer alternative to gets
+    printf("You entered: %s", line);
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`gets()\` (deprecated) → unsafe because it can overflow the buffer.
+
+* \`fgets()\` → safer: reads input including spaces, up to buffer size.
+
+* Always prefer \`fgets()\` for multi-word strings.
+
+### \`fgets()\` in C:
+
+\`fgets()\` is a **string input function** used to safely read a line of text (including spaces) from input.
+
+* Unlike \`scanf("%s", ...)\` which stops at whitespace, \`fgets()\` can read **entire sentences with spaces**.
+
+* It prevents **buffer overflow** by limiting the number of characters read.
+
+* **Function prototype:**
+
+  * \`char *fgets(char *str, int n, FILE *stream);\`
+
+    * \`str\` → character array (buffer) to store the input.
+
+    * \`n\` → maximum number of characters to read (including \`\\0\`).
+
+    * \`stream\` → usually \`stdin\` (keyboard input).
+
+* Automatically adds a **null terminator \`\\0\`** at the end of the string.
+
+* If the user presses Enter before filling \`n-1\` characters, the **newline character \`\\n\` is also stored**.
+
+* \`fgets()\` is a **safe, efficient** way to read strings (with spaces) from input in C.
+
+* **Note:** A buffer is just a block of memory (an array of bytes/characters) that temporarily stores data while it is being transferred between places (like from keyboard to program, or program to screen).
+
+### Example :
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char str[50];   // buffer to store string
+    printf("Enter a line of text: ");
+    fgets(str, sizeof(str), stdin);   // read input from keyboard
+    printf("You entered: %s", str);
+    return 0;
+}
+\`\`\`
+
+* \`char str[50];\` Creates a buffer of 50 characters.
+
+* \`fgets(str, sizeof(str), stdin);\` Reads up to 49 characters (1 space left for \`\\0\`). Input is stored in \`str\`. \`stdin\` → standard input (keyboard).
+
+* \`printf("You entered: %s", str);\` Prints the entire line back to the user.
+
+#### Program 1: Basic String Operations
+
+\`\`\`c
+#include <stdio.h>
+#include <string.h>
+int main() {
+    char str1[50] = "Hello";
+    char str2[50] = "World";
+    char str3[50];
+    // strlen
+    printf("Length of str1 = %lu\\n", strlen(str1));
+    // strcpy
+    strcpy(str3, str1);
+    printf("After strcpy, str3 = %s\\n", str3);
+    // strcat
+    strcat(str1, str2);
+    printf("After strcat, str1 = %s\\n", str1);
+    // strcmp
+    if(strcmp(str1, str2) == 0)
+        printf("str1 and str2 are equal\\n");
+    else
+        printf("str1 and str2 are different\\n");
+    return 0;
+}
+\`\`\`
+
+### Explanation:
+
+* \`strlen(str1)\`
+
+  * Finds the **length of a string** (number of characters before \`\\0\`).
+
+  * Here, \`"Hello"\` has 5 characters, so output is \`5\`.
+
+* \`strcpy(str3, str1)\`
+
+  * Copies contents of \`str1\` into \`str3\`.
+
+  * After this, \`str3\` becomes \`"Hello"\`.
+
+* \`strcat(str1, str2)\`
+
+  * Appends \`str2\` to the end of \`str1\`.
+
+  * \`"Hello"\` + \`"World"\` → \`"HelloWorld"\`.
+
+  * Now \`str1\` contains \`"HelloWorld"\`.
+
+* \`strcmp(str1, str2)\`
+
+  * Compares two strings character by character.
+
+  * Returns \`0\` if equal, negative if \`str1 < str2\`, positive if \`str1 > str2\`.
+
+  * Since \`"HelloWorld"\` ≠ \`"World"\`, it prints \`"str1 and str2 are different"\`.
+
+* **Start:** \`str1 = "Hello"\`, \`str2 = "World"\`.
+
+* \`strlen\` → prints length = 5.
+
+* \`strcpy\` → copies \`"Hello"\` into \`str3\`.
+
+* \`strcat\` → joins \`"World"\` to \`str1\` → \`"HelloWorld"\`.
+
+* \`strcmp\` → checks \`str1\` vs \`str2\` → they are different.
+
+### Some more string Functions:
+
+* \`strncpy\` → copy part of a string
+
+* \`strstr\` → find a substring
+
+* \`strchr\` → find the first occurrence of a character
+
+* \`strrchr\` → find the last occurrence of a character
+
+### Example:
+
+\`\`\`c
+#include <stdio.h>
+#include <string.h>
+int main() {
+    char text[100] = "C programming is fun and powerful.";
+    char copy[20];
+    char *ptr;
+    // 1. strncpy: copy first 10 characters
+    strncpy(copy, text, 10);    // copy first 10 chars
+    copy[10] = '\\0';            // manually add null terminator
+    printf("First 10 characters copied: %s\\n", copy);
+    // 2. strstr: find substring "fun"
+    ptr = strstr(text, "fun");
+    if(ptr != NULL)
+        printf("Substring 'fun' found: %s\\n", ptr);
+    else
+        printf("Substring 'fun' not found.\\n");
+    // 3. strchr: find first occurrence of 'i'
+    ptr = strchr(text, 'i');
+    if(ptr != NULL)
+        printf("First 'i' found at: %s\\n", ptr);
+    // 4. strrchr: find last occurrence of 'i'
+    ptr = strrchr(text, 'i');
+    if(ptr != NULL)
+        printf("Last 'i' found at: %s\\n", ptr);
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`strncpy(copy, text, 10);\`
+
+  * Copies the first 10 characters from \`text\` into \`copy\`.
+
+  * Since \`strncpy\` does not always add \`\\0\`, we do it manually: \`copy[10] = '\\0';\`.
+
+  * **Output:** \`First 10 characters copied: C program\`
+
+* \`strstr(text, "fun");\`
+
+  * Searches for the substring \`"fun"\` in \`text\`.
+
+  * If found, returns a pointer to the substring inside \`text\`.
+
+  * **Output:** \`Substring 'fun' found: fun and powerful.\`
+
+* \`strchr(text, 'i');\`
+
+  * Finds the **first occurrence** of \`'i'\`.
+
+  * Returns a pointer starting from that position to the end of the string.
+
+  * **Output:** \`First 'i' found at: is fun and powerful.\`
+
+* \`strrchr(text, 'i');\`
+
+  * Finds the **last occurrence** of \`'i'\`.
+
+  * **Output:** \`Last 'i' found at: iful.\`
+
+* \`char *ptr;\`
+
+  * Here: \`ptr\` is a pointer to char.
+
+  * It can hold the address of a character inside a string.
+
+## 2D Character Arrays in C
+
+### Introduction
+
+A **1D character array** (e.g., \`char str[20]\`) stores a single string. A **2D character array** is used to store **multiple strings** — just like a table of characters.
+Think of it as:
+
+* **Rows** = number of strings.
+
+* **Columns** = maximum length of each string.
+
+* **Example:**
+
+  * \`char names[3][10];\`
+
+  * Can store 3 strings, each up to 9 characters (+1 for \`\\0\`).
+
+* **Usage**
+
+  * Store a **list of words** (e.g., names, cities, countries).
+
+  * Useful when handling multiple strings at once (like a dictionary).
+
+  * Simplifies string storage instead of declaring multiple separate arrays.
+
+### Syntax:
+
+\`char array_name[rows][columns];\`
+
+* \`rows\` = number of strings.
+
+* \`columns\` = maximum length of each string (including \`\\0\`).
+
+### Examples:
+
+* \`char fruits[3][10] = { "Apple", "Banana", "Mango" };\`
+
+* \`char cities[5][20];\` // space for 5 cities, each up to 19 characters
+
+### Example 1: Initializing and Printing Strings
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char fruits[3][10] = {"Apple", "Banana", "Mango"};
+    printf("List of fruits:\\n");
+    for(int i=0; i<3; i++) {
+        printf("%s\\n", fruits[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`fruits[3][10]\` → 3 strings, each up to 9 chars.
+
+* Loop prints each row as a string.
+
+* **Output:**
+
+  \`\`\`
+  List of fruits:
+  Apple
+  Banana
+  Mango
+  \`\`\`
+
+### Example 2: Taking Input for Multiple Strings
+
+\`\`\`c
+#include <stdio.h>
+int main() {
+    char cities[3][20];
+    printf("Enter 3 city names:\\n");
+    for(int i=0; i<3; i++) {
+        scanf("%s", cities[i]);   // no & needed, as cities[i] is itself a char array
+    }
+    printf("\\nYou entered:\\n");
+    for(int i=0; i<3; i++) {
+        printf("%s\\n", cities[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* User inputs 3 cities.
+
+* Each row of \`cities\` holds one string.
+
+* Loop prints them back.
+
+* **Sample Output:**
+
+  \`\`\`
+  Enter 3 city names:
+  Hyderabad
+  Bangalore
+  Mysore
+  You entered:
+  Hyderabad
+  Bangalore
+  Mysore
+  \`\`\`
+
+### Example 3: Using \`fgets()\` for Strings with Spaces
+
+\`\`\`c
+#include <stdio.h>
+#include <string.h>
+int main() {
+    char names[3][30];
+    printf("Enter 3 names (with spaces allowed):\\n");
+    for(int i=0; i<3; i++) {
+        fgets(names[i], sizeof(names[i]), stdin);
+        // remove newline character if present
+        names[i][strcspn(names[i], "\\n")] = '\\0';
+    }
+    printf("\\nNames entered:\\n");
+    for(int i=0; i<3; i++) {
+        printf("%s\\n", names[i]);
+    }
+    return 0;
+}
+\`\`\`
+
+### Explanation
+
+* \`fgets\` reads strings including spaces (e.g., "New York").
+
+* \`strcspn\` removes the newline (\`\\n\`) stored by \`fgets\`.
+
+* Works well for names with multiple words.
+
+### Summary
+
+* **2D char arrays** = array of strings.
+
+* **Syntax:** \`char arr[rows][columns];\`
+
+* Each row is one string.
+
+* Use \`scanf\` for single words, \`fgets\` for sentences with spaces.
+
+## Exercise Programs:
+
+1. Write a program to declare an integer array and print all its elements using a loop.
+2. Write a program to find the sum of all elements in an integer array.
+3. Write a program to find the maximum element in an array.
+4. Write a program to find the minimum element in an array.
+5. Write a program to count the number of even and odd elements in an array.
+6. Write a program to print an array in reverse order.
+7. Write a program to copy all elements of one array into another array.
+8. Write a program to search for an element in an array.
+9. Write a program to calculate and print the average of elements in an array.
+10. Write a program to sort an array of integers in ascending order.
+11. Write a program to merge two arrays into a third array.
+12. Write a program to add two matrices (2D arrays).
+13. Write a program to multiply two matrices (2D arrays).
+14. Write a program to find the transpose of a matrix.
+15. Write a program to shift elements of an array to the left by one position.
+16. Write a program to shift elements of an array to the right by one position.
+17. Write a program to count the number of vowels in a string.
+18. Write a program to check if a given string is a palindrome.
+19. Write a program to concatenate two strings without using the \`strcat\` function.
+20. Write a program to sort an array of names (strings) in alphabetical order.
+`;
+
+    // Render markdown to HTML
+    document.getElementById('ebook-content').innerHTML = marked.parse(markdownContent);
+
+    // PDF generation logic
+    document.getElementById('download-btn').addEventListener('click', () => {
+        const element = document.getElementById('ebook-content');
+        const downloadBtn = document.getElementById('download-btn');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        downloadBtn.classList.add('hidden');
+        loadingSpinner.classList.remove('hidden');
+
+        const options = {
+            margin: 1,
+            filename: 'The_Definitive_Guide_to_Arrays_in_C.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(options).from(element).save().then(() => {
+            downloadBtn.classList.remove('hidden');
+            loadingSpinner.classList.add('hidden');
+        });
+    });
+</script>
+
+</body>
+</html>
